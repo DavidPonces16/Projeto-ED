@@ -1,5 +1,6 @@
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "Biblioteca.h"
 
 /** \brief Aloca Memoria para uma Biblioteca
@@ -11,6 +12,73 @@
  * \date   11/04/2024
  *
  */
+
+// Definição da estrutura BIBLIOTECA
+typedef struct {
+    char* NOME;
+    char* FICHEIRO_LOGS;
+    void *HLivros; //ponteiro
+
+} BIBLIOTECA;
+
+BIBLIOTECA* reservaBiblioteca(const char* _nome, const char* _logs) {
+    // Reserva memória para a estrutura BIBLIOTECA
+    BIBLIOTECA* biblioteca = (BIBLIOTECA*)malloc(sizeof(BIBLIOTECA));
+    if (biblioteca == NULL) {
+        fprintf(stderr, "Erro ao reservar memoria para a biblioteca\n");
+        return NULL;
+    }
+
+    // Reserva memória e copia o nome da biblioteca
+    biblioteca->NOME = (char*)malloc(strlen(_nome) + 1);
+    if (biblioteca->NOME == NULL) {
+        fprintf(stderr, "Erro ao reservar memoria para o nome da biblioteca\n");
+        free(biblioteca);  // Disponibiliza a memória da estrutura em caso de falha
+        return NULL;
+    }
+    strcpy(biblioteca->NOME, _nome);
+
+    // Reserva memória e copia o nome do ficheiro dos logs
+    biblioteca->FICHEIRO_LOGS = (char*)malloc(strlen(_logs) + 1);
+    if (biblioteca->FICHEIRO_LOGS == NULL) {
+        fprintf(stderr, "Erro ao reservar memoria para o ficheiro dos logs\n");
+        free(biblioteca->NOME);  // Disponibiliza a memória do nome
+        free(biblioteca);        // Disponibiliza a memória da estrutura
+        return NULL;
+    }
+    strcpy(biblioteca->FICHEIRO_LOGS, _logs);
+
+    return biblioteca;
+}
+
+// Função para liberar a memória reservada para a BIBLIOTECA
+void disponibilizaBiblioteca(BIBLIOTECA* biblioteca) {
+    if (biblioteca != NULL) {
+        free(biblioteca->NOME);
+        free(biblioteca->FICHEIRO_LOGS);
+        free(biblioteca);
+    }
+}
+
+int main() {
+    // Exemplo de uso da função reservaBiblioteca
+    const char* nome = "Minha Biblioteca";
+    const char* logs = "logs.txt";
+    
+    BIBLIOTECA* biblioteca = reservaBiblioteca(nome, logs);
+    if (biblioteca != NULL) {
+        printf("Biblioteca reservada com sucesso!\n");
+        printf("Nome: %s\n", biblioteca->NOME);
+        printf("Logs: %s\n", biblioteca->FICHEIRO_LOGS);
+        
+        // Libera a memória alocada
+        Biblioteca(biblioteca);
+    }
+
+    return 0;
+}
+
+
 BIBLIOTECA *CriarBiblioteca(char *_nome, char *_logs)
 {
     BIBLIOTECA *Bib = (BIBLIOTECA *)malloc(sizeof(BIBLIOTECA));
