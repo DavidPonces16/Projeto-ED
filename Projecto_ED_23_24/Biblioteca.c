@@ -192,6 +192,7 @@ char *AreaMaisComum(BIBLIOTECA *B)
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
     time_t now = time(NULL) ;
     fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
+    fprintf(F_Logs, "Sai de %s na data %s\n", __FUNCTION__, ctime(&now));
 
     // Aqui o teu codigo
 
