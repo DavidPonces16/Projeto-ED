@@ -6,27 +6,51 @@
  *
  * \param _id int
  * \param _nome char*
- * \param _categoria char*
+ * \param _dataNascimento date*
+ * \param _idFreguesia int*
  * \return PESSOA*
  *
  */
-PESSOA *CriarPessoa(int _id, char *_nome, char *_categoria)
-{
+
+PESSOA *CriarPessoa(int _id, char *_nome, char *_dataNascimento, int _idFreguesia) {
     PESSOA *P = (PESSOA *)malloc(sizeof(PESSOA));
-    P->NOME = (char *)malloc((strlen(_nome) + 1)*sizeof(char));
+    if (P == NULL) {
+        fprintf(stderr, "Erro ao alocar memória para PESSOA\n");
+        return NULL;
+    }
+
+    P->NOME = (char *)malloc((strlen(_nome) + 1) * sizeof(char));
+    if (P->NOME == NULL) {
+        fprintf(stderr, "Erro ao alocar memória para NOME\n");
+        free(P);
+        return NULL;
+    }
     strcpy(P->NOME, _nome);
-    P->CATEGORIA = (char *)malloc((strlen(_categoria) + 1)*sizeof(char));
-    strcpy(P->CATEGORIA, _categoria);
+
+    P->DATA_NASCIMENTO = (char *)malloc((strlen(_dataNascimento) + 1) * sizeof(char));
+    if (P->DATA_NASCIMENTO == NULL) {
+        fprintf(stderr, "Erro ao alocar memória para DATA_NASCIMENTO\n");
+        free(P->NOME);
+        free(P);
+        return NULL;
+    }
+    strcpy(P->DATA_NASCIMENTO, _dataNascimento);
+
     P->ID = _id;
+    P->ID_FREGUESIA = _idFreguesia;
+
     return P;
 }
+
 void MostrarPessoa(PESSOA *P)
 {
-    printf("\tPESSOA: ID: %d [%s] [%s]\n", P->ID, P->NOME, P->CATEGORIA);
+    printf("\tPESSOA: ID: %d [%s] [%s]\n", P->ID, P->NOME, P->DATA_NASCIMENTO);
 }
 void DestruirPessoa(PESSOA *P)
 {
-    free (P->NOME);
-    free (P->CATEGORIA);
-    free (P);
+    if (P != NULL) {
+        free(P->NOME);
+        free(P->DATA_NASCIMENTO);
+        free(P);
+    }
 }

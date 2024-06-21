@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "Biblioteca.h"
+
+#define BUFFER_SIZE 1024
 
 /** \brief Aloca Memoria para uma Biblioteca
  *
@@ -12,14 +11,6 @@
  * \date   11/04/2024
  *
  */
-
-// Definição da estrutura BIBLIOTECA
-typedef struct {
-    char* NOME;
-    char* FICHEIRO_LOGS;
-    void *HLivros; //ponteiro
-
-} BIBLIOTECA;
 
 BIBLIOTECA* reservaBiblioteca(const char* _nome, const char* _logs) {
     // Reserva memória para a estrutura BIBLIOTECA
@@ -38,16 +29,6 @@ BIBLIOTECA* reservaBiblioteca(const char* _nome, const char* _logs) {
     }
     strcpy(biblioteca->NOME, _nome);
 
-    // Reserva memória e copia o nome do ficheiro dos logs
-    biblioteca->FICHEIRO_LOGS = (char*)malloc(strlen(_logs) + 1);
-    if (biblioteca->FICHEIRO_LOGS == NULL) {
-        fprintf(stderr, "Erro ao reservar memoria para o ficheiro dos logs\n");
-        free(biblioteca->NOME);  // Disponibiliza a memória do nome
-        free(biblioteca);        // Disponibiliza a memória da estrutura
-        return NULL;
-    }
-    strcpy(biblioteca->FICHEIRO_LOGS, _logs);
-
     return biblioteca;
 }
 
@@ -58,24 +39,6 @@ void disponibilizaBiblioteca(BIBLIOTECA* biblioteca) {
         free(biblioteca->FICHEIRO_LOGS);
         free(biblioteca);
     }
-}
-
-int main() {
-    // Exemplo de uso da função reservaBiblioteca
-    const char* nome = "Minha Biblioteca";
-    const char* logs = "logs.txt";
-    
-    BIBLIOTECA* biblioteca = reservaBiblioteca(nome, logs);
-    if (biblioteca != NULL) {
-        printf("Biblioteca reservada com sucesso!\n");
-        printf("Nome: %s\n", biblioteca->NOME);
-        printf("Logs: %s\n", biblioteca->FICHEIRO_LOGS);
-        
-        // Libera a memória alocada
-        Biblioteca(biblioteca);
-    }
-
-    return 0;
 }
 
 
@@ -122,27 +85,89 @@ void DestruirBiblioteca(BIBLIOTECA *B)
 
     fclose(F_Logs);
 }
-int LoadFicheiroBiblioteca(BIBLIOTECA *B)
-{
+
+int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
+    printf("LoadFicheiroBiblioteca\n");
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
-    time_t now = time(NULL) ;
+    if (F_Logs == NULL) {
+        fprintf(stderr, "Erro ao abrir o ficheiro de logs\n");
+        return EXIT_FAILURE;
+    }
+    
+    time_t now = time(NULL);
     fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
+    fflush(F_Logs);
 
-    // Vosso Codigo.....
-    PESSOA *X = CriarPessoa(1234, "Jose", "CAT-A");
-    AddHashing(B->HLivros, X);
-    X = CriarPessoa(567, "Pedro", "CAT-A");
-    AddHashing(B->HLivros, X);
-    X = CriarPessoa(456, "Luis", "CAT-A");
-    AddHashing(B->HLivros, X);
-    X = CriarPessoa(56, "Miguel", "CAT-B");
-    AddHashing(B->HLivros, X);
-    X = CriarPessoa(5690, "James Bond", "CAT-Z");
-    AddHashing(B->HLivros, X);
+    FILE *file = fopen("files/requisitantes.txt", "r");
+    if (file == NULL) {
+        fprintf(F_Logs, "Erro ao abrir o ficheiro requisitantes.txt\n");
+        fclose(F_Logs);
+        return EXIT_FAILURE;
+    }
+    
+    char buffer[BUFFER_SIZE];
+    
+    printf("A carregar ficheiro de requisitantes\n");
+    fprintf(F_Logs, "A carregar ficheiro de requisitantes\n");
+    fflush(F_Logs);
 
+    while (fgets(buffer, BUFFER_SIZE, file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        char* token = strtok(buffer, "\t");
+        if (token == NULL) {
+            fprintf(F_Logs, "Linha malformada: %s\n", buffer);
+            fflush(F_Logs);
+            continue;
+        }
+
+        int id = atoi(token);
+
+        char* nome = strtok(NULL, "\t");
+        if (nome == NULL) {
+            fprintf(F_Logs, "Nome ausente na linha: %s\n", buffer);
+            fflush(F_Logs);
+            continue;
+        }
+
+        char* data_nascimento = strtok(NULL, "\t");
+        if (data_nascimento == NULL) {
+            fprintf(F_Logs, "Data de nascimento ausente na linha: %s\n", buffer);
+            fflush(F_Logs);
+            continue;
+        }
+
+        char* id_freguesia_str = strtok(NULL, "\t");
+        if (id_freguesia_str == NULL) {
+            fprintf(F_Logs, "ID de freguesia ausente na linha: %s\n", buffer);
+            fflush(F_Logs);
+            continue;
+        }
+        int id_freguesia = atoi(id_freguesia_str);
+
+        PESSOA* novaPessoa = CriarPessoa(id, nome, data_nascimento, id_freguesia);
+        if (novaPessoa == NULL) {
+            fprintf(F_Logs, "Erro ao criar pessoa para a linha: %s\n", buffer);
+            fflush(F_Logs);
+            continue;
+        }
+        
+        if (AddRequisitante(B, novaPessoa) == EXIT_FAILURE) {
+            fprintf(F_Logs, "Erro ao adicionar requisitante para a linha: %s\n", buffer);
+            fflush(F_Logs);
+            free(novaPessoa);
+            continue;
+        }
+    }
+
+    fclose(file);
+    fprintf(F_Logs, "Leitura do ficheiro de requisitantes concluída com sucesso\n");
     fclose(F_Logs);
+    
     return EXIT_SUCCESS;
 }
+
+
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L)
 {
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
@@ -176,16 +201,79 @@ LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B)
     fclose(F_Logs);
     return NULL;
 }
-char *ApelidoMaisComum(BIBLIOTECA *B)
-{
+char* ApelidoMaisComum(BIBLIOTECA *B) {
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
     time_t now = time(NULL) ;
     fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
 
-    // Aqui o teu codigo
+    typedef struct ApelidoNode {
+        char apelido[50];
+        int count;
+        struct ApelidoNode *proxima;
+    } APELIDO_NODE;
+
+    APELIDO_NODE *apelidos = NULL;
+
+    PESSOA *atual = B->requisitantes;
+    while (atual != NULL) {
+        char *ultimo_espaco = strrchr(atual->NOME, ' ');
+        if (ultimo_espaco != NULL) {
+            char *apelido = ultimo_espaco + 1;
+            
+            APELIDO_NODE *node = apelidos;
+            APELIDO_NODE *prev = NULL;
+            while (node != NULL && strcmp(node->apelido, apelido) != 0) {
+                prev = node;
+                node = node->proxima;
+            }
+            if (node == NULL) {
+                node = (APELIDO_NODE*)malloc(sizeof(APELIDO_NODE));
+                if (node == NULL) {
+                    fprintf(F_Logs, "Erro de memória ao adicionar apelido\n");
+                    fclose(F_Logs);
+                    return NULL;
+                }
+                strcpy(node->apelido, apelido);
+                node->count = 1;
+                node->proxima = NULL;
+                if (prev == NULL) {
+                    apelidos = node;
+                } else {
+                    prev->proxima = node;
+                }
+            } else {
+                node->count++;
+            }
+        }
+        atual = atual->proxima;
+    }
+
+    APELIDO_NODE *mais_comum = apelidos;
+    APELIDO_NODE *node = apelidos;
+    while (node != NULL) {
+        if (node->count > mais_comum->count) {
+            mais_comum = node;
+        }
+        node = node->proxima;
+    }
+
+    char *result = NULL;
+    if (mais_comum != NULL) {
+        result = (char*)malloc(strlen(mais_comum->apelido) + 1);
+        if (result != NULL) {
+            strcpy(result, mais_comum->apelido);
+        }
+    }
+
+    while (apelidos != NULL) {
+        node = apelidos;
+        apelidos = apelidos->proxima;
+        free(node);
+    }
 
     fclose(F_Logs);
-    return NULL;
+    printf("Apelido mais comum: %s\n", result);
+    return result;
 }
 char *AreaMaisComum(BIBLIOTECA *B)
 {
@@ -199,17 +287,26 @@ char *AreaMaisComum(BIBLIOTECA *B)
     fclose(F_Logs);
     return NULL;
 }
-int AddRequisitante(BIBLIOTECA *B, PESSOA *X)
-{
+
+int AddRequisitante(BIBLIOTECA *B, PESSOA *novaPessoa) {
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
-    time_t now = time(NULL) ;
-    fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
+    if (F_Logs == NULL) {
+        fprintf(F_Logs, "Erro ao abrir o ficheiro de logs add\n");
+        return EXIT_FAILURE;
+    }
 
-    // Aqui o teu codigo
+    time_t now = time(NULL);
 
-    fclose(F_Logs);
+    if (B == NULL || novaPessoa == NULL) {
+        return EXIT_FAILURE;
+    }
+
+    novaPessoa->proxima = B->requisitantes;
+    B->requisitantes = novaPessoa;
+
     return EXIT_SUCCESS;
 }
+
 PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod)
 {
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");

@@ -2,7 +2,7 @@
 #include "Lista.h"
 
 //--------------------------------------------------
-/** \brief Permite alocar memória para uma lista
+/** \brief Permite alocar memï¿½ria para uma lista
  *
  * \return LISTA* : Retorna a lista alocada
  * \date 10/04/2024

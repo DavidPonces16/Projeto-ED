@@ -50,7 +50,7 @@ void AddHashing(HASHING *H, PESSOA *P)
     NO_CHAVE *Key_colocar = FuncaoHashing(H, P);
     if (!Key_colocar)
     {
-        Key_colocar = AddCHAVE(H->LChaves, P->CATEGORIA);
+        Key_colocar = AddCHAVE(H->LChaves, P->ID_FREGUESIA);
     }
     AddInicio(Key_colocar->DADOS, P);
 }
@@ -75,7 +75,7 @@ NO_CHAVE *FuncaoHashing(HASHING *H, PESSOA *X)
     NO_CHAVE *P = H->LChaves->Inicio;
     while (P)
     {
-        if (stricmp(P->KEY, X->CATEGORIA) == 0)
+        if (stricmp(P->KEY, X->ID_FREGUESIA) == 0)
             return P;
         P = P->Prox;
     }

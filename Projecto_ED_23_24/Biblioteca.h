@@ -14,11 +14,10 @@ typedef struct
     char FICHEIRO_LOGS[50];
 
     HASHING *HLivros;
-    //LISTA   *LRequisitantes;
-    //LISTA_Requisicoes *LRequisicoes;
+    
+    PESSOA** requisitantes;
 }BIBLIOTECA;
 
-BIBLIOTECA *CriarBiblioteca(char *_nome, char *_logs);
 void ShowBiblioteca(BIBLIOTECA *B);
 void DestruirBiblioteca(BIBLIOTECA *B);
 int LoadFicheiroBiblioteca(BIBLIOTECA *B);

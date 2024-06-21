@@ -10,10 +10,12 @@ typedef struct
 {
     char *NOME;
     int ID;
-    char *CATEGORIA;
+    char *DATA_NASCIMENTO;
+    int *ID_FREGUESIA;
+    struct Pessoa *proxima;
 }PESSOA;
 
-PESSOA *CriarPessoa(int _id, char *_nome, char *_categoria);
+PESSOA *CriarPessoa(int _id, char *_nome,  char *_dataNascimento, int _idFreguesia);
 void MostrarPessoa(PESSOA *P);
 void DestruirPessoa(PESSOA *P);
 
