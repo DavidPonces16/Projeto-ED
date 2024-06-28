@@ -14,7 +14,7 @@ typedef struct biblioteca {
     char *NOME;
     char *FICHEIRO_LOGS;
     LIVRO **HLivros; 
-    REQUISICAO *LRequisicoes; 
+    LISTA *LRequisicoes; 
     LISTA *LRequisitantes; 
 } BIBLIOTECA;
 
@@ -24,9 +24,9 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B);
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L);
 int RemoverLivroBiblioteca(BIBLIOTECA *B, int isbn);
 LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B);
-//char *ApelidoMaisComum(BIBLIOTECA *B);
 //char *AreaMaisComum(BIBLIOTECA *B);
 //int AddRequisitante(BIBLIOTECA *B, PESSOA *X);
 PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod);
 char *SobrenomeMaisComum(BIBLIOTECA *B);
+LISTA *CarregarFreguesiasValidas();
 #endif // BIBLIOTECA_H_INCLUDED

@@ -95,10 +95,13 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
         return EXIT_FAILURE;
     }
     
+    LISTA *freguesiasValidas = CarregarFreguesiasValidas();
+    if (freguesiasValidas == NULL) return EXIT_FAILURE;
+
     FILE *file = fopen("files/Requisitantes.txt", "r");
     if (file == NULL) {
         perror("Erro ao abrir o ficheiro");
-        return EXIT_FAILURE;
+        return -1;
     }
 
     B->LRequisitantes = CriarLista();
@@ -106,25 +109,46 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
     while (fgets(linha, sizeof(linha), file)) {
         linha[strcspn(linha, "\n")] = 0;
 
+        char linha_original[256];
+        strncpy(linha_original, linha, sizeof(linha_original));
+        linha_original[sizeof(linha_original) - 1] = '\0';
+
         char *token = strtok(linha, "\t");
         int id = atoi(token);
+        if (!ValidarIDRequisitante(id)) {
+            fprintf(F_Logs, "Requisitante [%s] inválido, Id mal estruturado\n", linha_original);
+            continue;
+        };
 
         token = strtok(NULL, "\t");
         char *nome = strdup(token);
 
         token = strtok(NULL, "\t");
         char *dataNascimento = strdup(token);
+        if (!ValidarDataNascimento(dataNascimento)) {
+            fprintf(F_Logs, "Requisitante [%s] inválido, Data de Nascimento mal estruturada\n", linha_original);
+            free(nome);
+            free(dataNascimento);
+            continue;
+        }
 
         token = strtok(NULL, "\t");
         int idFreguesia = atoi(token);
+        if (!ValidarIDFreguesia(idFreguesia, freguesiasValidas)) {
+            fprintf(F_Logs, "Requisitante [%s] inválido, Id da Freguesia mal estruturado\n", linha_original);
+            free(nome);
+            free(dataNascimento);
+            continue;
+        }
 
         PESSOA *pessoa = CriarPessoa(id, nome, dataNascimento, idFreguesia);
         AddInicio(B->LRequisitantes, pessoa);
 
-        free(nome);
-        free(dataNascimento);
+        free(nome);  // Libertar memória alocada por strdup
+        free(dataNascimento);  // Libertar memória alocada por strdup
     }
     fclose(file);
+    DestruirLista(freguesiasValidas);
     fprintf(F_Logs, "Leitura do ficheiro de requisitantes concluída com sucesso\n");
     fclose(F_Logs);
     
@@ -171,10 +195,16 @@ PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod)
     time_t now = time(NULL) ;
     fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
 
-    // Aqui o teu codigo
+    NO *temp = B->LRequisitantes->Inicio;
+    while (temp != NULL) {
+        if (temp->Info->ID == cod) {
+            return temp->Info;
+        }
+        temp = temp->Prox;
+    }
 
     fclose(F_Logs);
-    return NULL;
+    return temp->Info;
 }
 
 // Função auxiliar para obter o último sobrenome
@@ -187,12 +217,8 @@ char *ObterSobrenome(char *nomeCompleto) {
 }
 
 char *SobrenomeMaisComum(BIBLIOTECA *B) {
-    FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
-    time_t now = time(NULL) ;
-    fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
-
     HASHING *hashing = CriarHashing();
-    
+
     NO *temp = B->LRequisitantes->Inicio;
     while (temp != NULL) {
         char *sobrenome = ObterSobrenome(temp->Info->NOME);
@@ -214,8 +240,79 @@ char *SobrenomeMaisComum(BIBLIOTECA *B) {
         resultado = strdup(maisComum->KEY);
     }
 
-    printf("Sobrenome mais comum: %s\n", resultado);
     DestruirHashing(hashing);
-    fclose(F_Logs);
     return resultado;
+}
+
+// Função para validar id_requisitante
+int ValidarIDRequisitante(int id) {
+    char idStr[10];
+    sprintf(idStr, "%09d", id);
+
+    if (strlen(idStr) != 9) return 0;
+
+    int soma = 0;
+    for (int i = 0; i < 9; i++) {
+        if (!isdigit(idStr[i])) return 0;
+        soma += idStr[i] - '0';
+    }
+
+    return soma % 10 == 0;
+}
+
+// Função para validar data_nasc
+int ValidarDataNascimento(const char *data) {
+    if (strlen(data) != 10) return 0;
+    if (data[2] != '-' || data[5] != '-') return 0;
+
+    int dia = atoi(&data[0]);
+    int mes = atoi(&data[3]);
+    int ano = atoi(&data[6]);
+
+    if (dia < 1 || dia > 31) return 0;
+    if (mes < 1 || mes > 12) return 0;
+    if (ano < 1900 || ano > 2100) return 0;
+
+    return 1;
+}
+
+// Função para carregar freguesias válidas
+LISTA *CarregarFreguesiasValidas() {
+    FILE *file = fopen("files/Freguesias.txt", "r");
+    if (file == NULL) {
+        perror("Erro ao abrir o ficheiro de freguesias");
+        return NULL;
+    }
+
+    LISTA *freguesiasValidas = CriarLista();
+    char linha[100];
+    while (fgets(linha, sizeof(linha), file)) {
+        linha[strcspn(linha, "\n")] = 0;
+
+        char *token = strtok(linha, "\t");
+        if (token != NULL) {
+            char *codigo = strdup(token);
+            PESSOA *freguesia = CriarPessoa(0, codigo, "", 0);
+            AddInicio(freguesiasValidas, freguesia);
+            free(codigo);
+        }
+    }
+    fclose(file);
+    return freguesiasValidas;
+}
+
+// Função para validar id_freguesia
+int ValidarIDFreguesia(int idFreguesia, LISTA *freguesiasValidas) {
+
+    char idStr[7];
+    sprintf(idStr, "%06d", idFreguesia);
+
+    NO *temp = freguesiasValidas->Inicio;
+    while (temp != NULL) {
+        if (strcmp(temp->Info->NOME, idStr) == 0) {
+            return 1;
+        }
+        temp = temp->Prox;
+    }
+    return 0;
 }
