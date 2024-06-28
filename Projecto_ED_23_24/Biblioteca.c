@@ -87,8 +87,14 @@ void DestruirBiblioteca(BIBLIOTECA *B)
     fclose(F_Logs);
 }
 
+/*************************************************************
+ *                     SEÇÃO DE Loading                      *
+ * Este bloco de código é responsável por carregar os dados  *
+ * necessários a partir de arquivos externos.                *
+                                                             *
+ *************************************************************/
+
 int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
-    printf("LoadFicheiroBiblioteca\n");
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
     if (F_Logs == NULL) {
         fprintf(stderr, "Erro ao abrir o ficheiro de logs\n");
@@ -103,6 +109,8 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
         perror("Erro ao abrir o ficheiro");
         return -1;
     }
+
+    fprintf(F_Logs, "A iniciar a leitura do ficheiro de requisitantes\n");
 
     B->LRequisitantes = CriarLista();
     char linha[256];
@@ -155,6 +163,56 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
     return EXIT_SUCCESS;
 }
 
+int LoadLivrosBiblioteca(BIBLIOTECA *B) {
+
+    FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
+    if (F_Logs == NULL) {
+        fprintf(stderr, "Erro ao abrir o ficheiro de logs\n");
+        return EXIT_FAILURE;
+    }
+    time_t now = time(NULL) ;
+    fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
+
+    FILE *file = fopen("files/Livros.txt", "r");
+    if (file == NULL) {
+        perror("Erro ao abrir o ficheiro de livros");
+        return -1;
+    }
+
+    fprintf(F_Logs, "A iniciar a leitura do ficheiro de livros\n");
+
+    B->HLivros = CriarLista();
+    char linha[256];
+    while (fgets(linha, sizeof(linha), file)) {
+        linha[strcspn(linha, "\n")] = 0;
+
+        char *token = strtok(linha, "\t");
+        char *nome = strdup(token);
+
+        token = strtok(NULL, "\t");
+        int id = atoi(token);
+
+        token = strtok(NULL, "\t");
+        char *area = strdup(token);
+
+        LIVRO *livro = CriarLivro(id, nome, area);
+        AddInicio(B->HLivros, livro);
+        fprintf(F_Logs, "Livro [%s] adicionado com sucesso\n", nome);
+
+        free(nome);
+        free(area); 
+    }
+    fclose(file);
+    fclose(F_Logs);
+    return 0;
+}
+
+/*************************************************************
+ *                      SEÇÃO DE LIVROS                      *
+ * Esta seção de código é responsável pelo gerenciamento de  *
+ * livros na biblioteca.                                     *
+ *************************************************************/
+
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L)
 {
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
@@ -189,6 +247,12 @@ LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B)
     return NULL;
 }
 
+/*************************************************************
+ *                  SEÇÃO DE REQUISITANTE                    *
+ * Esta seção de código é responsável pelo gerenciamento de  *
+ * requisitantes na biblioteca.                              *
+ *************************************************************/
+
 PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod)
 {
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
@@ -217,6 +281,10 @@ char *ObterSobrenome(char *nomeCompleto) {
 }
 
 char *SobrenomeMaisComum(BIBLIOTECA *B) {
+    FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
+    time_t now = time(NULL);
+    fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
+
     HASHING *hashing = CriarHashing();
 
     NO *temp = B->LRequisitantes->Inicio;
@@ -240,9 +308,16 @@ char *SobrenomeMaisComum(BIBLIOTECA *B) {
         resultado = strdup(maisComum->KEY);
     }
 
-    DestruirHashing(hashing);
+    fclose(F_Logs);
+    //DestruirHashing(hashing);
     return resultado;
 }
+
+/*************************************************************
+ *                      SEÇÃO DE VALIDAÇÕES                  *
+ * Este bloco de código é responsável por realizar as        *
+ * validações necessárias dos dados lidos e processados.     *
+ *************************************************************/
 
 // Função para validar id_requisitante
 int ValidarIDRequisitante(int id) {

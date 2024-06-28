@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Pessoa.h"
+#include "Livro.h"
 
 typedef struct no
 {
@@ -25,7 +26,7 @@ void ShowLista(LISTA *L);
 //--------------------------------------------------
 void DestruirLista(LISTA *L);
 //--------------------------------------------------
-PESSOA *PesquisarLista(LISTA *L, char *_nome);
+void *PesquisarLista(LISTA *L, char *_nome);
 //--------------------------------------------------
 int SizeLista(LISTA *L);
 //--------------------------------------------------

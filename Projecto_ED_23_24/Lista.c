@@ -1,4 +1,3 @@
-
 #include "Lista.h"
 
 //--------------------------------------------------
@@ -28,46 +27,43 @@ void AddInicio(LISTA *L, PESSOA *X)
 }
 
 //--------------------------------------------------
-void ShowLista(LISTA *L)
-{
-    if (!L) return;
-    //printf("NEL = %d\n", L->NEL);
-    NO *P = L->Inicio;
-    while (P != NULL)
-    {
-        MostrarPessoa(P->Info);
-        P = P->Prox;
+void ShowLista(LISTA *L) {
+    NO *temp = L->Inicio;
+    while (temp != NULL) {
+        if (((PESSOA *)temp->Info)->NOME != NULL) {
+            MostrarPessoa((PESSOA *)temp->Info);
+        } else if (((LIVRO *)temp->Info)->NOME != NULL) {
+            MostrarLivro((LIVRO *)temp->Info);
+        }
+        temp = temp->Prox;
     }
 }
 
 //--------------------------------------------------
-void DestruirLista(LISTA *L)
-{
-    //printf("Implementar <%s>\n", __FUNCTION__);
+void DestruirLista(LISTA *L) {
     if (!L) return;
-    NO *Martim;
-    NO *Helder = L->Inicio;
-    while (Helder)
-    {
-        Martim = Helder->Prox;
-        DestruirPessoa(Helder->Info);
-        free (Helder);
-        Helder = Martim;
+    NO *temp = L->Inicio;
+    while (temp != NULL) {
+        NO *prox = temp->Prox;
+        if (((PESSOA *)temp->Info)->NOME != NULL) {
+            DestruirPessoa((PESSOA *)temp->Info);
+        } else if (((LIVRO *)temp->Info)->NOME != NULL) {
+            DestruirLivro((LIVRO *)temp->Info);
+        }
+        free(temp);
+        temp = prox;
     }
     free(L);
 }
 
 //--------------------------------------------------
-PESSOA *PesquisarLista(LISTA *L, char *_nome)
-{
-    printf("Implementar <%s>\n", __FUNCTION__);
-    if (L == NULL) return NULL;
-    NO *P = L->Inicio;
-    while (P)
-    {
-        if (stricmp(P->Info->NOME, _nome) == 0)
-            return P->Info;
-        P = P->Prox;
+void *PesquisarLista(LISTA *L, char *_nome) {
+    NO *temp = L->Inicio;
+    while (temp != NULL) {
+        if (strcmp(((PESSOA *)temp->Info)->NOME, _nome) == 0) {
+            return temp->Info;
+        }
+        temp = temp->Prox;
     }
     return NULL;
 }

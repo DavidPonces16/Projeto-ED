@@ -1,0 +1,5 @@
+C Programming Language	101	Computer Science
+Artificial Intelligence	102	Computer Science
+Clean Code	103	Software Engineering
+Introduction to Algorithms	104	Algorithms
+Operating System Concepts	105	Computer Science

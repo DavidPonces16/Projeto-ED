@@ -13,14 +13,15 @@
 typedef struct biblioteca {
     char *NOME;
     char *FICHEIRO_LOGS;
-    LIVRO **HLivros; 
-    LISTA *LRequisicoes; 
+    LISTA *HLivros; 
+    REQUISICAO *LRequisicoes; 
     LISTA *LRequisitantes; 
 } BIBLIOTECA;
 
 void ShowBiblioteca(BIBLIOTECA *B);
 void DestruirBiblioteca(BIBLIOTECA *B);
 int LoadFicheiroBiblioteca(BIBLIOTECA *B);
+int LoadLivrosBiblioteca(BIBLIOTECA *B);
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L);
 int RemoverLivroBiblioteca(BIBLIOTECA *B, int isbn);
 LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B);

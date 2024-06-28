@@ -5,25 +5,21 @@
 #include <string.h>
 #include "Lista.h"
 
-typedef struct no_chave
-{
+typedef struct no_chave {
     char *KEY; 
     LISTA *DADOS;
     struct no_chave *Prox;
-}NO_CHAVE;
+} NO_CHAVE;
 
-typedef struct
-{
+typedef struct {
     int NEL;
     NO_CHAVE *Inicio;
-}LISTA_CHAVES;
+} LISTA_CHAVES;
 
-typedef struct
-{
+typedef struct {
     LISTA_CHAVES *LChaves;
-}HASHING;
-//--------------------------------------------------------
-//--------------------------------------------------------
+} HASHING;
+
 //--------------------------------------------------------
 HASHING *CriarHashing();
 //--------------------------------------------------------
@@ -34,8 +30,6 @@ void AddHashing(HASHING *H, char *P);
 void ShowHashing(HASHING *H);
 //--------------------------------------------------------
 NO_CHAVE *FuncaoHashing(HASHING *H, PESSOA *X);
-//--------------------------------------------------------
-//--------------------------------------------------------
 //--------------------------------------------------------
 
 #endif // HASHING_H_INCLUDED
