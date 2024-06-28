@@ -44,7 +44,7 @@ PESSOA *CriarPessoa(int _id, char *_nome, char *_dataNascimento, int _idFreguesi
 
 void MostrarPessoa(PESSOA *P)
 {
-    printf("\tPESSOA: ID: %d [%s] [%s]\n", P->ID, P->NOME, P->DATA_NASCIMENTO);
+    printf("\tPESSOA: ID: %d [%s] [%s] %d\n", P->ID, P->NOME, P->DATA_NASCIMENTO, P->ID_FREGUESIA);
 }
 void DestruirPessoa(PESSOA *P)
 {

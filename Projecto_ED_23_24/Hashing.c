@@ -22,49 +22,49 @@ NO_CHAVE *AddCHAVE(LISTA_CHAVES *L, char *key)
     L->NEL++;
     return aux;
 }
-HASHING *CriarHashing()
-{
-    HASHING *Has = (HASHING *)malloc(sizeof(HASHING));
-    Has->LChaves = CriarListaCHAVES();
-    return Has;
+HASHING *CriarHashing() {
+    HASHING *H = (HASHING *)malloc(sizeof(HASHING));
+    H->LChaves = (LISTA_CHAVES *)malloc(sizeof(LISTA_CHAVES));
+    H->LChaves->NEL = 0;
+    H->LChaves->Inicio = NULL;
+    return H;
 }
-void DestruirHashing(HASHING *H)
-{
-    if (!H) return;
-    NO_CHAVE *Seguinte;
-    NO_CHAVE *P = H->LChaves->Inicio;
-    while (P)
-    {
-        Seguinte = P->Prox;
-        DestruirLista(P->DADOS);
-        free (P->KEY);
-        free (P);
-        P = Seguinte;
+void DestruirHashing(HASHING *H) {
+    NO_CHAVE *current = H->LChaves->Inicio;
+    while (current != NULL) {
+        NO_CHAVE *prox = current->Prox;
+        free(current->KEY);
+        DestruirLista(current->DADOS);
+        free(current);
+        current = prox;
     }
+    free(H->LChaves);
     free(H);
 }
-void AddHashing(HASHING *H, PESSOA *P)
-{
-    if (!H) return;
-    if (!H->LChaves) return;
-    NO_CHAVE *Key_colocar = FuncaoHashing(H, P);
-    if (!Key_colocar)
-    {
-        Key_colocar = AddCHAVE(H->LChaves, P->ID_FREGUESIA);
+void AddHashing(HASHING *H, char *sobrenome) {
+    NO_CHAVE *current = H->LChaves->Inicio;
+    while (current != NULL) {
+        if (strcmp(current->KEY, sobrenome) == 0) {
+            AddInicio(current->DADOS, NULL);
+            return;
+        }
+        current = current->Prox;
     }
-    AddInicio(Key_colocar->DADOS, P);
+
+    NO_CHAVE *novo = (NO_CHAVE *)malloc(sizeof(NO_CHAVE));
+    novo->KEY = strdup(sobrenome);
+    novo->DADOS = CriarLista();
+    AddInicio(novo->DADOS, NULL); 
+    novo->Prox = H->LChaves->Inicio;
+    H->LChaves->Inicio = novo;
+    H->LChaves->NEL++;
 }
 
-void ShowHashing(HASHING *H)
-{
-    if (!H) return;
-    if (!H->LChaves) return;
-    NO_CHAVE *P = H->LChaves->Inicio;
-    while (P)
-    {
-        printf("Key: [%s]\n", P->KEY);
-        ShowLista(P->DADOS);
-        P = P->Prox;
+void ShowHashing(HASHING *H) {
+    NO_CHAVE *current = H->LChaves->Inicio;
+    while (current != NULL) {
+        printf("Sobrenome: %s, Contagem: %d\n", current->KEY, current->DADOS->NEL);
+        current = current->Prox;
     }
 }
 NO_CHAVE *FuncaoHashing(HASHING *H, PESSOA *X)
@@ -81,3 +81,5 @@ NO_CHAVE *FuncaoHashing(HASHING *H, PESSOA *X)
     }
     return NULL;
 }
+
+

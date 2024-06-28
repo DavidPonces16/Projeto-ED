@@ -30,7 +30,7 @@ int Menu()
     printf("Displaying Menu\n");
     printf("1- Load\n");
     printf("2- Show\n");
-    printf("3- Nome mais Comum\n");
+    printf("3- Sobrenome mais Comum\n");
     printf("0-Sair\n");
     int op;
     op = LerInteiro("Qual a o opcao? ");
@@ -41,15 +41,9 @@ int main()
 {
     printf("Projecto-Biblioteca-Versao-Base!\n");
     // Exemplo_Hashing();
-    BIBLIOTECA *Bib;
-    Bib = CriarBiblioteca("Biblioteca-ESTGV", "log.txt");
-    Bib->requisitantes = NULL;
-    if (Bib == NULL)
-    {
-        fprintf(stderr, "Erro ao criar a biblioteca\n");
-        return EXIT_FAILURE;
-    }
-    printf("Biblioteca criada com sucesso\n");
+    BIBLIOTECA *biblioteca = (BIBLIOTECA *)malloc(sizeof(BIBLIOTECA));
+    biblioteca->NOME = "Biblioteca Central";
+    biblioteca->FICHEIRO_LOGS = "log.txt";
     int OP;
     do
     {
@@ -59,7 +53,7 @@ int main()
         {
         case 1:
             printf("Loading Biblioteca\n");
-            if (LoadFicheiroBiblioteca(Bib) == EXIT_SUCCESS)
+            if (LoadFicheiroBiblioteca(biblioteca) == EXIT_SUCCESS)
             {
                 printf("Requisitantes carregados com sucesso!\n");
             }
@@ -70,10 +64,10 @@ int main()
             break;
         case 2:
             printf("Showing Biblioteca\n");
-            ShowBiblioteca(Bib);
+            ShowBiblioteca(biblioteca);
             break;
         case 3:
-            ApelidoMaisComum(Bib);
+            SobrenomeMaisComum(biblioteca);
             break;
         default:
             printf("Opcao nao implementada\n");
@@ -82,6 +76,6 @@ int main()
 
     } while (OP != 0);
     printf("Exiting and destroying Biblioteca\n");
-    DestruirBiblioteca(Bib);
+    DestruirBiblioteca(biblioteca);
     return EXIT_SUCCESS; // ou EXIT_FAILURE
 }

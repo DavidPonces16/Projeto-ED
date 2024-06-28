@@ -8,15 +8,15 @@
 #include "Livro.h"
 #include "Lista.h"
 #include "Hashing.h"
-typedef struct
-{
+#include "Pessoa.h"
+#include "Requisicao.h"
+typedef struct biblioteca {
     char *NOME;
-    char FICHEIRO_LOGS[50];
-
-    HASHING *HLivros;
-    
-    PESSOA** requisitantes;
-}BIBLIOTECA;
+    char *FICHEIRO_LOGS;
+    LIVRO **HLivros; 
+    REQUISICAO *LRequisicoes; 
+    LISTA *LRequisitantes; 
+} BIBLIOTECA;
 
 void ShowBiblioteca(BIBLIOTECA *B);
 void DestruirBiblioteca(BIBLIOTECA *B);
@@ -24,8 +24,9 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B);
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L);
 int RemoverLivroBiblioteca(BIBLIOTECA *B, int isbn);
 LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B);
-char *ApelidoMaisComum(BIBLIOTECA *B);
-char *AreaMaisComum(BIBLIOTECA *B);
-int AddRequisitante(BIBLIOTECA *B, PESSOA *X);
+//char *ApelidoMaisComum(BIBLIOTECA *B);
+//char *AreaMaisComum(BIBLIOTECA *B);
+//int AddRequisitante(BIBLIOTECA *B, PESSOA *X);
 PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod);
+char *SobrenomeMaisComum(BIBLIOTECA *B);
 #endif // BIBLIOTECA_H_INCLUDED
