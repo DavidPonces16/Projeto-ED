@@ -37,20 +37,42 @@ void MenuLivros(BIBLIOTECA *biblioteca)
         switch (op)
         {
         case 1:
-            printf("Adicionar Livro\n");
-            // addLivro();
+            {
+                int id = LerInteiro("ID do Livro: ");
+                char nome[100];
+                printf("Nome do Livro: ");
+                scanf(" %[^\n]", nome);
+                char area[100];
+                printf("Area do Livro: ");
+                scanf(" %[^\n]", area);
+                int ano = LerInteiro("Ano de Lançamento: ");
+                LIVRO *novoLivro = CriarLivro(id, nome, area, ano);
+                if (AddLivroBiblioteca(biblioteca, novoLivro)) {
+                    printf("Livro adicionado com sucesso!\n");
+                } else {
+                    printf("Erro ao adicionar o livro.\n");
+                }
+            }
             break;
         case 2:
             printf("Listar Todos os Livros por Area\n");
-            // listarLivrosPorArea();
+            ListarLivrosPorArea(biblioteca);
             break;
         case 3:
-            printf("Area com mais Livros\n");
-            // areaComMaisLivros();
+            {
+                printf("Área com mais Livros\n");
+                char *areaMaisComum = AreaMaisComum(biblioteca);
+                if (areaMaisComum) {
+                    printf("A área com mais livros é: %s\n", areaMaisComum);
+                    free(areaMaisComum);
+                } else {
+                    printf("Não foi possível determinar a área com mais livros.\n");
+                }
+            }
             break;
         case 4:
             printf("Livros mais recentes\n");
-            // livrosMaisRecentes();
+            LivrosMaisRecentes(biblioteca);
             break;
         case 5:
             printf("Livros mais requisitados\n");
@@ -130,13 +152,7 @@ void MenuRequisitantes(BIBLIOTECA *biblioteca)
             // pessoasSemRequisicoes();
             break;
         case 10:
-            char *sobrenome = SobrenomeMaisComum(biblioteca);
-            if (sobrenome) {
-                printf("Sobrenome mais usado: %s\n\n", sobrenome);
-                free(sobrenome);
-            } else {
-                printf("Não foi possível determinar o sobrenome mais usado.\n");
-            }
+            SobrenomeMaisComum(biblioteca);
             break;
         case 11:
             printf("Pessoas por Distrito ou Conselho por nome\n");
@@ -174,8 +190,37 @@ void MenuRequisicoes(BIBLIOTECA *biblioteca)
         switch (op)
         {
         case 1:
-            printf("Adicionar Requisicao\n");
-            // adicionarRequisicao();
+            {
+                char *idReqStr = GerarNovoIdRequisicao();
+                int idPessoa = LerInteiro("ID do Requisitante: ");
+                int idLivro = LerInteiro("ID do Livro: ");
+                PESSOA *pessoa = PesquisarRequisitante(biblioteca, idPessoa);
+                LIVRO *livro = NULL;
+                printf("ID Req: %s\n", idReqStr);
+                NO *noLivro = biblioteca->HLivros->Inicio;
+                while (noLivro) {
+                    if (((LIVRO *)noLivro->Info)->ID == idLivro) {
+                        livro = (LIVRO *)noLivro->Info;
+                        break;
+                    }
+                    noLivro = noLivro->Prox;
+                }
+                printf("Pessoa: %p, Livro: %p\n", pessoa, livro);
+                if (pessoa && livro) {
+                    int idReq = atoi(idReqStr + 3);
+                    REQUISICAO *novaRequisicao = CriarRequisicao(idReq, pessoa, livro);
+                    printf("Requisicao: %p\n", novaRequisicao);
+                    if (AddRequisicaoBiblioteca(biblioteca, novaRequisicao)) {
+                        printf("Requisição adicionada com sucesso!\n");
+                    } else {
+                        printf("Erro ao adicionar a requisição.\n");
+                    }
+                    free(idReqStr);
+                } else {
+                    printf("Requisitante ou Livro não encontrado.\n");
+                    free(idReqStr);
+                }
+            }
             break;
         case 2:
             printf("Remover Requisicao\n");

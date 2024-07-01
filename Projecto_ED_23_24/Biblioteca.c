@@ -164,7 +164,6 @@ int LoadFicheiroBiblioteca(BIBLIOTECA *B) {
 }
 
 int LoadLivrosBiblioteca(BIBLIOTECA *B) {
-
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
     if (F_Logs == NULL) {
         fprintf(stderr, "Erro ao abrir o ficheiro de logs\n");
@@ -195,7 +194,10 @@ int LoadLivrosBiblioteca(BIBLIOTECA *B) {
         token = strtok(NULL, "\t");
         char *area = strdup(token);
 
-        LIVRO *livro = CriarLivro(id, nome, area);
+        token = strtok(NULL, "\t");
+        int ano = atoi(token);
+
+        LIVRO *livro = CriarLivro(id, nome, area, ano);
         AddInicio(B->HLivros, livro);
         fprintf(F_Logs, "Livro [%s] adicionado com sucesso\n", nome);
 
@@ -207,6 +209,7 @@ int LoadLivrosBiblioteca(BIBLIOTECA *B) {
     return 0;
 }
 
+
 /*************************************************************
  *                      SEÇÃO DE LIVROS                      *
  * Esta seção de código é responsável pelo gerenciamento de  *
@@ -215,13 +218,25 @@ int LoadLivrosBiblioteca(BIBLIOTECA *B) {
 
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L)
 {
+    if (!B || !L) return 0;
+    
+    FILE *file = fopen("files/Livros.txt", "a");
+    if (!file) {
+        perror("Erro ao abrir o ficheiro de livros");
+        return 0;
+    }
+
+    fprintf(file, "%s\t%d\t%s\t%d\n", L->NOME, L->ID, L->AREA, L->ANO);
+    fclose(file);
+
+    AddInicio(B->HLivros, L);
+
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
-    time_t now = time(NULL) ;
-    fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
-
-    // Aqui o teu codigo
-
-    fclose(F_Logs);
+    if (F_Logs != NULL) {
+        time_t now = time(NULL);
+        fprintf(F_Logs, "Livro [%s] adicionado em %s\n", L->NOME, ctime(&now));
+        fclose(F_Logs);
+    }
     return EXIT_SUCCESS;
 }
 int RemoverLivroBiblioteca(BIBLIOTECA *B, int isbn)
@@ -246,6 +261,99 @@ LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B)
     fclose(F_Logs);
     return NULL;
 }
+char *AreaMaisComum(BIBLIOTECA *B) {
+    if (!B || !B->HLivros) return NULL;
+
+    LISTA *areas = CriarLista();
+    NO *noLivro = B->HLivros->Inicio;
+
+    while (noLivro) {
+        LIVRO *livro = (LIVRO *)noLivro->Info;
+        AREA *areaAtual = (AREA *)PesquisarLista(areas, livro->AREA);
+
+        if (!areaAtual) {
+            areaAtual = CriarArea(livro->AREA);
+            AddInicio(areas, areaAtual);
+        }
+
+        AdicionarLivroArea(areaAtual, livro);
+        noLivro = noLivro->Prox;
+    }
+
+    AREA *maisComum = NULL;
+    NO *noArea = areas->Inicio;
+    while (noArea) {
+        AREA *area = (AREA *)noArea->Info;
+        if (!maisComum || area->Livros->NEL > maisComum->Livros->NEL) {
+            maisComum = area;
+        }
+        noArea = noArea->Prox;
+    }
+
+    char *resultado = NULL;
+    if (maisComum) {
+        resultado = strdup(maisComum->NOME);
+    }
+
+    DestruirLista(areas);
+    return resultado;
+}
+void ListarLivrosPorArea(BIBLIOTECA *B) {
+    if (!B || !B->HLivros) return;
+
+    LISTA *areas = CriarLista();
+    NO *noLivro = B->HLivros->Inicio;
+
+    while (noLivro) {
+        LIVRO *livro = (LIVRO *)noLivro->Info;
+        AREA *areaAtual = (AREA *)PesquisarLista(areas, livro->AREA);
+
+        if (!areaAtual) {
+            areaAtual = CriarArea(livro->AREA);
+            AddInicio(areas, areaAtual);
+        }
+
+        AdicionarLivroArea(areaAtual, livro);
+        noLivro = noLivro->Prox;
+    }
+
+    NO *noArea = areas->Inicio;
+    while (noArea) {
+        MostrarLivrosPorArea((AREA *)noArea->Info);
+        noArea = noArea->Prox;
+    }
+
+    DestruirLista(areas);
+}
+void LivrosMaisRecentes(BIBLIOTECA *B) {
+    if (!B || !B->HLivros) return;
+
+    int anoMaisRecente = 0;
+    NO *noLivro = B->HLivros->Inicio;
+
+    while (noLivro) {
+        LIVRO *livro = (LIVRO *)noLivro->Info;
+        if (livro->ANO > anoMaisRecente) {
+            anoMaisRecente = livro->ANO;
+        }
+        noLivro = noLivro->Prox;
+    }
+
+    if (anoMaisRecente == 0) {
+        printf("Nenhum livro encontrado.\n");
+        return;
+    }
+
+    printf("Livros do ano mais recente (%d):\n", anoMaisRecente);
+    noLivro = B->HLivros->Inicio;
+    while (noLivro) {
+        LIVRO *livro = (LIVRO *)noLivro->Info;
+        if (livro->ANO == anoMaisRecente) {
+            MostrarLivro(livro);
+        }
+        noLivro = noLivro->Prox;
+    }
+}
 
 /*************************************************************
  *                  SEÇÃO DE REQUISITANTE                    *
@@ -267,6 +375,7 @@ PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod)
         temp = temp->Prox;
     }
 
+    printf("Requisitante nao encontrado\n");
     fclose(F_Logs);
     return temp->Info;
 }
@@ -309,8 +418,40 @@ char *SobrenomeMaisComum(BIBLIOTECA *B) {
     }
 
     fclose(F_Logs);
+    printf("Sobrenome mais comum: %s\n", resultado);
     //DestruirHashing(hashing);
     return resultado;
+}
+
+/*************************************************************
+ *                      SEÇÃO DE REQUISICOES                 *
+ * Este bloco de código é responsável por realizar as        *
+ * requisicoes de livros                                     *
+ *************************************************************/
+
+int AddRequisicaoBiblioteca(BIBLIOTECA *B, REQUISICAO *R) {
+    if (!B || !R) return 0;
+
+    AddInicio(B->LRequisicoes, R);
+    printf("Requisicao adicionada com sucesso!\n");
+
+    FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
+    if (F_Logs != NULL) {
+        time_t now = time(NULL);
+        fprintf(F_Logs, "Requisição [%d] adicionada em %s\n", R->ID, ctime(&now));
+        fclose(F_Logs);
+    }
+
+    FILE *file = fopen("files/Requisicoes.txt", "a");
+    if (file == NULL) {
+        perror("Erro ao abrir o ficheiro de requisições");
+        return 0;
+    }
+    printf("Requisicao: %d\n", R->ID);
+    fprintf(file, "%d\t%d\t%d\n", R->ID, R->Ptr_Req->ID, R->Ptr_Livro->ID);
+    fclose(file);
+
+    return 1; // Sucesso
 }
 
 /*************************************************************

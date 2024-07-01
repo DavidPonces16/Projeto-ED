@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>//necessário p/ função time()
+#include <time.h>//necessï¿½rio p/ funï¿½ï¿½o time()
+
+#define REQUISICAO_ID_FILE "files/ultimo_id_requisicao.txt"
 
 int Aleatorio(int min, int max)
 {
@@ -21,4 +23,33 @@ int LerInteiro(char *txt)
     printf("%s : ", txt);
     scanf("%d", &x);
     return x;
+}
+
+int LerUltimoIdRequisicao() {
+    FILE *file = fopen(REQUISICAO_ID_FILE, "r");
+    if (!file) return 0;
+
+    int ultimoId;
+    fscanf(file, "%d", &ultimoId);
+    fclose(file);
+    return ultimoId;
+}
+
+void AtualizarUltimoIdRequisicao(int ultimoId) {
+    FILE *file = fopen(REQUISICAO_ID_FILE, "w");
+    if (file) {
+        fprintf(file, "%d", ultimoId);
+        fclose(file);
+    }
+}
+
+char *GerarNovoIdRequisicao() {
+    int ultimoId = LerUltimoIdRequisicao();
+    ultimoId++;
+
+    char *novoId = (char *)malloc(10 * sizeof(char));
+    snprintf(novoId, 10, "RQ-%03d", ultimoId);
+
+    AtualizarUltimoIdRequisicao(ultimoId);
+    return novoId;
 }

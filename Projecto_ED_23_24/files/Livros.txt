@@ -1,5 +1,6 @@
-C Programming Language	101	Computer Science
-Artificial Intelligence	102	Computer Science
-Clean Code	103	Software Engineering
-Introduction to Algorithms	104	Algorithms
-Operating System Concepts	105	Computer Science
+C Programming Language	101	Computer Science	1978
+Artificial Intelligence	102	Computer Science	1995
+Clean Code	103	Software Engineering	2008
+Introduction to Algorithms	104	Algorithms	1990
+Operating System Concepts	105	Computer Science	1983
+Ola	123123	Ola	2022

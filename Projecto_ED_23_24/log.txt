@@ -1,4 +1,4 @@
-Entrei em LoadLivrosBiblioteca na data Fri Jun 28 17:37:37 2024
+Entrei em LoadLivrosBiblioteca na data Mon Jul 01 10:34:56 2024
 
 A iniciar a leitura do ficheiro de livros
 Livro [C Programming Language] adicionado com sucesso
@@ -6,6 +6,7 @@ Livro [Artificial Intelligence] adicionado com sucesso
 Livro [Clean Code] adicionado com sucesso
 Livro [Introduction to Algorithms] adicionado com sucesso
 Livro [Operating System Concepts] adicionado com sucesso
+Livro [Ola] adicionado com sucesso
 A iniciar a leitura do ficheiro de requisitantes
 Requisitante [133818204	Odete Pinto Arouca Mateus Ferraz	21-07-1996	0302FE] inválido, Id da Freguesia mal estruturado
 Requisitante [169906612	Dolores Matos Amado Almada	06-05-1998	0302FC] inválido, Id da Freguesia mal estruturado
@@ -36,10 +37,7 @@ Requisitante [707657530	Leonor Antunes Fonseca Leal Nogueira	24-03-1996	0302FB] 
 Requisitante [462278579	Bruna Dias Valbom Belchior Brito	04-set-1959	150506] inválido, Data de Nascimento mal estruturada
 Requisitante [758077268	Bernardo Martins Antunes Nogueira	31-07-1996	0302FA] inválido, Id da Freguesia mal estruturado
 Leitura do ficheiro de requisitantes concluída com sucesso
-Entrei em SobrenomeMaisComum na data Fri Jun 28 17:38:07 2024
-
-Sobrenome mais comum: Amorim
-Entrei em LoadLivrosBiblioteca na data Fri Jun 28 17:41:06 2024
+Entrei em LoadLivrosBiblioteca na data Mon Jul 01 10:37:07 2024
 
 A iniciar a leitura do ficheiro de livros
 Livro [C Programming Language] adicionado com sucesso
@@ -47,6 +45,7 @@ Livro [Artificial Intelligence] adicionado com sucesso
 Livro [Clean Code] adicionado com sucesso
 Livro [Introduction to Algorithms] adicionado com sucesso
 Livro [Operating System Concepts] adicionado com sucesso
+Livro [Ola] adicionado com sucesso
 A iniciar a leitura do ficheiro de requisitantes
 Requisitante [133818204	Odete Pinto Arouca Mateus Ferraz	21-07-1996	0302FE] inválido, Id da Freguesia mal estruturado
 Requisitante [169906612	Dolores Matos Amado Almada	06-05-1998	0302FC] inválido, Id da Freguesia mal estruturado
@@ -77,12 +76,7 @@ Requisitante [707657530	Leonor Antunes Fonseca Leal Nogueira	24-03-1996	0302FB] 
 Requisitante [462278579	Bruna Dias Valbom Belchior Brito	04-set-1959	150506] inválido, Data de Nascimento mal estruturada
 Requisitante [758077268	Bernardo Martins Antunes Nogueira	31-07-1996	0302FA] inválido, Id da Freguesia mal estruturado
 Leitura do ficheiro de requisitantes concluída com sucesso
-Entrei em ShowBiblioteca na data Fri Jun 28 17:41:11 2024
-
-Entrei em SobrenomeMaisComum na data Fri Jun 28 17:41:23 2024
-
-Sobrenome mais comum: Amorim
-Entrei em LoadLivrosBiblioteca na data Fri Jun 28 17:42:12 2024
+Entrei em LoadLivrosBiblioteca na data Mon Jul 01 10:38:31 2024
 
 A iniciar a leitura do ficheiro de livros
 Livro [C Programming Language] adicionado com sucesso
@@ -90,6 +84,7 @@ Livro [Artificial Intelligence] adicionado com sucesso
 Livro [Clean Code] adicionado com sucesso
 Livro [Introduction to Algorithms] adicionado com sucesso
 Livro [Operating System Concepts] adicionado com sucesso
+Livro [Ola] adicionado com sucesso
 A iniciar a leitura do ficheiro de requisitantes
 Requisitante [133818204	Odete Pinto Arouca Mateus Ferraz	21-07-1996	0302FE] inválido, Id da Freguesia mal estruturado
 Requisitante [169906612	Dolores Matos Amado Almada	06-05-1998	0302FC] inválido, Id da Freguesia mal estruturado
@@ -120,10 +115,9 @@ Requisitante [707657530	Leonor Antunes Fonseca Leal Nogueira	24-03-1996	0302FB] 
 Requisitante [462278579	Bruna Dias Valbom Belchior Brito	04-set-1959	150506] inválido, Data de Nascimento mal estruturada
 Requisitante [758077268	Bernardo Martins Antunes Nogueira	31-07-1996	0302FA] inválido, Id da Freguesia mal estruturado
 Leitura do ficheiro de requisitantes concluída com sucesso
-Entrei em SobrenomeMaisComum na data Fri Jun 28 17:42:31 2024
+Entrei em PesquisarRequisitante na data Mon Jul 01 10:38:48 2024
 
-Sobrenome mais comum: Amorim
-Entrei em LoadLivrosBiblioteca na data Fri Jun 28 17:51:31 2024
+Entrei em LoadLivrosBiblioteca na data Mon Jul 01 10:39:17 2024
 
 A iniciar a leitura do ficheiro de livros
 Livro [C Programming Language] adicionado com sucesso
@@ -131,6 +125,7 @@ Livro [Artificial Intelligence] adicionado com sucesso
 Livro [Clean Code] adicionado com sucesso
 Livro [Introduction to Algorithms] adicionado com sucesso
 Livro [Operating System Concepts] adicionado com sucesso
+Livro [Ola] adicionado com sucesso
 A iniciar a leitura do ficheiro de requisitantes
 Requisitante [133818204	Odete Pinto Arouca Mateus Ferraz	21-07-1996	0302FE] inválido, Id da Freguesia mal estruturado
 Requisitante [169906612	Dolores Matos Amado Almada	06-05-1998	0302FC] inválido, Id da Freguesia mal estruturado
@@ -161,10 +156,7 @@ Requisitante [707657530	Leonor Antunes Fonseca Leal Nogueira	24-03-1996	0302FB] 
 Requisitante [462278579	Bruna Dias Valbom Belchior Brito	04-set-1959	150506] inválido, Data de Nascimento mal estruturada
 Requisitante [758077268	Bernardo Martins Antunes Nogueira	31-07-1996	0302FA] inválido, Id da Freguesia mal estruturado
 Leitura do ficheiro de requisitantes concluída com sucesso
-Entrei em SobrenomeMaisComum na data Fri Jun 28 17:51:37 2024
-
-Sobrenome mais comum: Amorim
-Entrei em LoadLivrosBiblioteca na data Fri Jun 28 17:59:00 2024
+Entrei em LoadLivrosBiblioteca na data Mon Jul 01 10:42:36 2024
 
 A iniciar a leitura do ficheiro de livros
 Livro [C Programming Language] adicionado com sucesso
@@ -172,6 +164,7 @@ Livro [Artificial Intelligence] adicionado com sucesso
 Livro [Clean Code] adicionado com sucesso
 Livro [Introduction to Algorithms] adicionado com sucesso
 Livro [Operating System Concepts] adicionado com sucesso
+Livro [Ola] adicionado com sucesso
 A iniciar a leitura do ficheiro de requisitantes
 Requisitante [133818204	Odete Pinto Arouca Mateus Ferraz	21-07-1996	0302FE] inválido, Id da Freguesia mal estruturado
 Requisitante [169906612	Dolores Matos Amado Almada	06-05-1998	0302FC] inválido, Id da Freguesia mal estruturado
@@ -202,9 +195,42 @@ Requisitante [707657530	Leonor Antunes Fonseca Leal Nogueira	24-03-1996	0302FB] 
 Requisitante [462278579	Bruna Dias Valbom Belchior Brito	04-set-1959	150506] inválido, Data de Nascimento mal estruturada
 Requisitante [758077268	Bernardo Martins Antunes Nogueira	31-07-1996	0302FA] inválido, Id da Freguesia mal estruturado
 Leitura do ficheiro de requisitantes concluída com sucesso
-Entrei em ShowBiblioteca na data Fri Jun 28 17:59:34 2024
+Entrei em LoadLivrosBiblioteca na data Mon Jul 01 10:44:51 2024
 
-Entrei em SobrenomeMaisComum na data Fri Jun 28 17:59:57 2024
-
-Entrei em DestruirBiblioteca na data Fri Jun 28 18:00:17 2024
-
+A iniciar a leitura do ficheiro de livros
+Livro [C Programming Language] adicionado com sucesso
+Livro [Artificial Intelligence] adicionado com sucesso
+Livro [Clean Code] adicionado com sucesso
+Livro [Introduction to Algorithms] adicionado com sucesso
+Livro [Operating System Concepts] adicionado com sucesso
+Livro [Ola] adicionado com sucesso
+A iniciar a leitura do ficheiro de requisitantes
+Requisitante [133818204	Odete Pinto Arouca Mateus Ferraz	21-07-1996	0302FE] inválido, Id da Freguesia mal estruturado
+Requisitante [169906612	Dolores Matos Amado Almada	06-05-1998	0302FC] inválido, Id da Freguesia mal estruturado
+Requisitante [194514691	Leonor Proenca Pacheco Barbosa Coelho	19-02-1970	0302FD] inválido, Id da Freguesia mal estruturado
+Requisitante [671118394	Hugo Soeiro Pacheco Nascimento Lopes	19-02-1978	0302FA] inválido, Id da Freguesia mal estruturado
+Requisitante [956810975	Maria Amorim Barbosa Pacheco Matos	10-05-1994	0302FH] inválido, Id da Freguesia mal estruturado
+Requisitante [833172196	Leonor Soeiro Barros Amado	28-06-1969	0302FE] inválido, Id da Freguesia mal estruturado
+Requisitante [516923996	Bernardo Dias Rego Ramalho	26-04-2000	0302FG] inválido, Id da Freguesia mal estruturado
+Requisitante [424105059	Luis Mora Amado Andrade Brito	1979-05-15	100933] inválido, Data de Nascimento mal estruturada
+Requisitante [267677870	Odete Mateus Bogas Arantes Carvalheira	26-02-1954	0302FH] inválido, Id da Freguesia mal estruturado
+Requisitante [101356475	Dulce Estrela Cunha Brito	10-04-1994	050613] inválido, Id mal estruturado
+Requisitante [550847984	Bruno Amorim Proenca Castanheira Seixas	17-04-1961	0302FF] inválido, Id da Freguesia mal estruturado
+Requisitante [571480898	Joana Tinoco Rosado Pinto Vivas	03-12-1951	13111] inválido, Id da Freguesia mal estruturado
+Requisitante [718859976	Lucas Carvalheira Pinto Belchior Almeida	09-07-1971	0302FE] inválido, Id da Freguesia mal estruturado
+Requisitante [200518086	Joana Amado Amora Macedo	17-04-1999	0302FG] inválido, Id da Freguesia mal estruturado
+Requisitante [167138248	Carmo Domingos Vivas Cipriano Silva	23/11/2001	141818] inválido, Data de Nascimento mal estruturada
+Requisitante [676976685	Odete Dias Brito Cabral Barbosa	15-11-1962	0302FF] inválido, Id da Freguesia mal estruturado
+Requisitante [545326618	Vitor Mota Brito Coelho	07-07-1950	0302FE] inválido, Id da Freguesia mal estruturado
+Requisitante [204931399	Cristiano Quadros Carrico Aguiar Carvalheira	01-07-1991	0302FB] inválido, Id da Freguesia mal estruturado
+Requisitante [349266785	Duarte Bogas Real Dinis Regueira	19-04-1969	0302FA] inválido, Id da Freguesia mal estruturado
+Requisitante [465970883	Clotilde Eanes Soeiro Arouca	26-12-1991	081803] inválido, Id da Freguesia mal estruturado
+Requisitante [639494843	Ana Carreira Real Amorim Baptista	26-02-1951	0302FF] inválido, Id da Freguesia mal estruturado
+Requisitante [959078156	Carla Clementino Almeida Castanheira Ferreira	06-01-1987	0302FF] inválido, Id da Freguesia mal estruturado
+Requisitante [336595568	Eduarda Regueira Ramalho Bogas	14-12-2001	0302FC] inválido, Id da Freguesia mal estruturado
+Requisitante [041736423	Clarice Real Eanes Lopes Antunes	13-05-1995	0302FE] inválido, Id da Freguesia mal estruturado
+Requisitante [210382545	Basilio Pinheiro Mota Azeredo	06-06-1969	0302FD] inválido, Id da Freguesia mal estruturado
+Requisitante [707657530	Leonor Antunes Fonseca Leal Nogueira	24-03-1996	0302FB] inválido, Id da Freguesia mal estruturado
+Requisitante [462278579	Bruna Dias Valbom Belchior Brito	04-set-1959	150506] inválido, Data de Nascimento mal estruturada
+Requisitante [758077268	Bernardo Martins Antunes Nogueira	31-07-1996	0302FA] inválido, Id da Freguesia mal estruturado
+Leitura do ficheiro de requisitantes concluída com sucesso

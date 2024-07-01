@@ -10,6 +10,7 @@
 #include "Hashing.h"
 #include "Pessoa.h"
 #include "Requisicao.h"
+#include "Area.h"
 typedef struct biblioteca {
     char *NOME;
     char *FICHEIRO_LOGS;
@@ -25,9 +26,8 @@ int LoadLivrosBiblioteca(BIBLIOTECA *B);
 int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L);
 int RemoverLivroBiblioteca(BIBLIOTECA *B, int isbn);
 LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B);
-//char *AreaMaisComum(BIBLIOTECA *B);
-//int AddRequisitante(BIBLIOTECA *B, PESSOA *X);
 PESSOA *PesquisarRequisitante(BIBLIOTECA *B, int cod);
 char *SobrenomeMaisComum(BIBLIOTECA *B);
 LISTA *CarregarFreguesiasValidas();
+int AddRequisicaoBiblioteca(BIBLIOTECA *B, REQUISICAO *R);
 #endif // BIBLIOTECA_H_INCLUDED
