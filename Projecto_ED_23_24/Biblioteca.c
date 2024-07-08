@@ -48,9 +48,9 @@ BIBLIOTECA *CriarBiblioteca(char *_nome, char *_logs)
     Bib->NOME = (char *)malloc((strlen(_nome) + 1) * sizeof(char));
     strcpy(Bib->NOME, _nome);
     strcpy(Bib->FICHEIRO_LOGS, _logs);
-    //Bib->HLivros = CriarHashing();
-    //Bib->LRequisicoes = CriarListaRequisicoes();
-    //Bib->LRequisitantes = CriarListaRequisitantes();
+    Bib->HLivros = CriarListaLivro();
+    Bib->LRequisicoes = CriarListaRequisicao();
+    Bib->LRequisitantes = CriarLista();
     return Bib;
 }
 
@@ -80,6 +80,8 @@ void DestruirBiblioteca(BIBLIOTECA *B)
     fprintf(F_Logs, "Entrei em %s na data %s\n", __FUNCTION__, ctime(&now));
 
     DestruirLista(B->LRequisitantes);
+    DestruirListaLivro(B->HLivros);
+    DestruirListaRequisicao(B->LRequisicoes);
     free(B->NOME);
     free(B->FICHEIRO_LOGS);
     free(B);
@@ -180,7 +182,7 @@ int LoadLivrosBiblioteca(BIBLIOTECA *B) {
 
     fprintf(F_Logs, "A iniciar a leitura do ficheiro de livros\n");
 
-    B->HLivros = CriarLista();
+    B->HLivros = CriarListaLivro();
     char linha[256];
     while (fgets(linha, sizeof(linha), file)) {
         linha[strcspn(linha, "\n")] = 0;
@@ -198,7 +200,7 @@ int LoadLivrosBiblioteca(BIBLIOTECA *B) {
         int ano = atoi(token);
 
         LIVRO *livro = CriarLivro(id, nome, area, ano);
-        AddInicio(B->HLivros, livro);
+        AddInicioLivro(B->HLivros, livro);
         fprintf(F_Logs, "Livro [%s] adicionado com sucesso\n", nome);
 
         free(nome);
@@ -229,7 +231,7 @@ int AddLivroBiblioteca(BIBLIOTECA *B, LIVRO *L)
     fprintf(file, "%s\t%d\t%s\t%d\n", L->NOME, L->ID, L->AREA, L->ANO);
     fclose(file);
 
-    AddInicio(B->HLivros, L);
+    AddInicioLivro(B->HLivros, L);
 
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");
     if (F_Logs != NULL) {
@@ -264,16 +266,16 @@ LIVRO *LivroMaisRequisitadoBiblioteca(BIBLIOTECA *B)
 char *AreaMaisComum(BIBLIOTECA *B) {
     if (!B || !B->HLivros) return NULL;
 
-    LISTA *areas = CriarLista();
+    LISTA_AREA *areas = CriarListaArea();
     NO *noLivro = B->HLivros->Inicio;
 
     while (noLivro) {
         LIVRO *livro = (LIVRO *)noLivro->Info;
-        AREA *areaAtual = (AREA *)PesquisarLista(areas, livro->AREA);
+        AREA *areaAtual = (AREA *)PesquisarListaArea(areas, livro->AREA);
 
         if (!areaAtual) {
             areaAtual = CriarArea(livro->AREA);
-            AddInicio(areas, areaAtual);
+            AddInicioArea(areas, areaAtual);
         }
 
         AdicionarLivroArea(areaAtual, livro);
@@ -295,22 +297,22 @@ char *AreaMaisComum(BIBLIOTECA *B) {
         resultado = strdup(maisComum->NOME);
     }
 
-    DestruirLista(areas);
+    DestruirListaArea(areas);
     return resultado;
 }
 void ListarLivrosPorArea(BIBLIOTECA *B) {
     if (!B || !B->HLivros) return;
 
-    LISTA *areas = CriarLista();
+    LISTA_AREA *areas = CriarListaArea();
     NO *noLivro = B->HLivros->Inicio;
 
     while (noLivro) {
         LIVRO *livro = (LIVRO *)noLivro->Info;
-        AREA *areaAtual = (AREA *)PesquisarLista(areas, livro->AREA);
+        AREA *areaAtual = (AREA *)PesquisarListaArea(areas, livro->AREA);
 
         if (!areaAtual) {
             areaAtual = CriarArea(livro->AREA);
-            AddInicio(areas, areaAtual);
+            AddInicioArea(areas, areaAtual);
         }
 
         AdicionarLivroArea(areaAtual, livro);
@@ -323,7 +325,7 @@ void ListarLivrosPorArea(BIBLIOTECA *B) {
         noArea = noArea->Prox;
     }
 
-    DestruirLista(areas);
+    DestruirListaArea(areas);
 }
 void LivrosMaisRecentes(BIBLIOTECA *B) {
     if (!B || !B->HLivros) return;
@@ -432,7 +434,7 @@ char *SobrenomeMaisComum(BIBLIOTECA *B) {
 int AddRequisicaoBiblioteca(BIBLIOTECA *B, REQUISICAO *R) {
     if (!B || !R) return 0;
 
-    AddInicio(B->LRequisicoes, R);
+    AddInicioRequisicao(B->LRequisicoes, R);
     printf("Requisicao adicionada com sucesso!\n");
 
     FILE *F_Logs = fopen(B->FICHEIRO_LOGS, "a");

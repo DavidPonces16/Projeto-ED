@@ -3,6 +3,7 @@
 
 #include "Lista.h"
 #include "Livro.h"
+#include "ListaLivro.h"
 
 typedef struct area {
     char *NOME;

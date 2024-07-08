@@ -7,6 +7,9 @@
 
 #include "Livro.h"
 #include "Lista.h"
+#include"ListaRequisicao.h"
+#include "ListaLivro.h"
+#include "ListaArea.h"
 #include "Hashing.h"
 #include "Pessoa.h"
 #include "Requisicao.h"
@@ -14,8 +17,8 @@
 typedef struct biblioteca {
     char *NOME;
     char *FICHEIRO_LOGS;
-    LISTA *HLivros; 
-    REQUISICAO *LRequisicoes; 
+    LISTA_LIVRO *HLivros; 
+    LISTA_REQUISICAO *LRequisicoes; 
     LISTA *LRequisitantes; 
 } BIBLIOTECA;
 
